@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Data Upload</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Choose CSV file</label>
+                            <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-upload me-2"></i>Upload & Generate
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Chart Controls -->
+            
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="col-md-9">
+            {% if charts_generated %}
+            <div class="row">
+                <!-- Bar Chart -->
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Bar Chart</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-link" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Download</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-expand me-2"></i>Fullscreen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <img src="{{ bar_chart_url }}" class="img-fluid" alt="Bar Chart">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Similar blocks for other charts -->
+                {% for chart_type, url in [
+                    ('Line Chart', line_chart_url),
+                    ('Pie Chart', pie_chart_url),
+                    ('Scatter Plot', scatter_plot_url),
+                    ('Bubble Chart', bubble_chart_url),
+                    ('Area Chart', area_chart_url),
+                    ('Histogram', histogram_url),
+                    ('Heatmap', heatmap_url),
+                    ('Box Plot', boxplot_url),
+                    ('Radar Chart', radar_chart_url)
+                ] %}
+                {% if url %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">{{ chart_type }}</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-link" data-bs-toggle="dropdown">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Download</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-expand me-2"></i>Fullscreen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <img src="{{ url }}" class="img-fluid" alt="{{ chart_type }}">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-chart-line fa-4x text-muted mb-3"></i>
+                <h4>No Charts Generated Yet</h4>
+                <p class="text-muted">Upload a CSV file to generate beautiful visualizations</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.btn-link {
+    color: #6c757d;
+}
+
+.btn-link:hover {
+    color: #0d6efd;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.img-fluid {
+    border-radius: 5px;
+}
+</style>
+{% endblock %} 

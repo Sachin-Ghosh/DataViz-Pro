@@ -1,0 +1,19 @@
+body {
+    background-color: #f9f9f9;
+}
+
+h1 {
+    color: #333;
+    font-weight: bold;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Data Summary</h4>
+        </div>
+        <div class="card-body">
+            {% if summary %}
+            <div class="row">
+                <!-- Basic Info -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Basic Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Total Records:</strong> {{ summary.total_records }}</p>
+                            <p><strong>Total Columns:</strong> {{ summary.total_columns }}</p>
+                            <p><strong>Column Names:</strong> {{ summary.columns|join(', ') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Numerical Summary -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Numerical Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Column</th>
+                                            <th>Mean</th>
+                                            <th>Median</th>
+                                            <th>Std Dev</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for col, stats in summary.numerical_summary.items() %}
+                                        <tr>
+                                            <td>{{ col }}</td>
+                                            <td>{{ "%.2f"|format(stats.mean) }}</td>
+                                            <td>{{ "%.2f"|format(stats.median) }}</td>
+                                            <td>{{ "%.2f"|format(stats.std) }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categorical Summary -->
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Categorical Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for col, values in summary.categorical_summary.items() %}
+                            <h6>{{ col }}</h6>
+                            <div class="table-responsive mb-3">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Value</th>
+                                            <th>Count</th>
+                                            <th>Percentage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for value, count, percentage in values %}
+                                        <tr>
+                                            <td>{{ value }}</td>
+                                            <td>{{ count }}</td>
+                                            <td>{{ "%.2f"|format(percentage) }}%</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                No data summary available. Please upload a CSV file first.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
